@@ -1,3 +1,4 @@
+<?php
 /**
  * Plugin Name: WPBakery to Gutenberg Migration
  * Description: Automatically converts WPBakery shortcodes into Gutenberg blocks.
