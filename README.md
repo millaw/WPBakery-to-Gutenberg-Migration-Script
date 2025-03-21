@@ -13,13 +13,7 @@ This script automates the migration of WordPress pages from WPBakery shortcodes 
 ### 1. Backup Your Website!
 Before running the script, **create a full backup of your WordPress database** to prevent data loss.
 
-### 2. Create a Custom Plugin
-- Navigate to `wp-content/plugins/` in your WordPress installation.
-- Create a new folder called `wpbakery-to-gutenberg`.
-- Inside that folder, create a file named `wpbakery-to-gutenberg.php`.
-- Copy and paste the migration script into the file.
-
-### 3. Run the Script
+### 2. Run the Script
 - Upload the `wpbakery-to-gutenberg` folder to your WordPress plugins directory.
 - Go to **WordPress Dashboard → Plugins**.
 - Find **"WPBakery to Gutenberg Migration"** and click **"Activate"**.
