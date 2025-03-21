@@ -1,4 +1,3 @@
-<?php
 /**
  * Plugin Name: WPBakery to Gutenberg Migration
  * Description: Automatically converts WPBakery shortcodes into Gutenberg blocks.
@@ -47,16 +46,22 @@ function wpbakery_to_gutenberg_convert() {
         $content = str_replace(['[vc_row]', '[/vc_row]', '[vc_column]', '[/vc_column]'], '', $content);
         
         // Convert Headings
-        $content = preg_replace('/\[vc_column_text\](.*?)\[\/vc_column_text\]/s', '<!-- wp:paragraph -->\1<!-- /wp:paragraph -->', $content);
+        $content = preg_replace('/\vc_column_text\\[\/vc_column_text\]/s', '<!-- wp:paragraph -->\1<!-- /wp:paragraph -->', $content);
 
         // Convert Images
-        $content = preg_replace('/\[vc_single_image image="(\d+)"[^\]]*\]/', '<!-- wp:image {"id":\1} --><img src="' . wp_get_attachment_url('\1') . '" /><!-- /wp:image -->', $content);
+        $content = preg_replace_callback('/\[vc_single_image image="(\d+)"[^\]]*\]/', function ($matches) {
+            $image_url = wp_get_attachment_url($matches[1]);
+            return '<!-- wp:image {"id":' . esc_attr($matches[1]) . '} --><img src="' . esc_url($image_url) . '" /><!-- /wp:image -->';
+        }, $content);
 
         // Convert Buttons
-        $content = preg_replace('/\[vc_btn title="(.*?)" link="(.*?)"[^\]]*\]/', '<!-- wp:button --><a href="\2">\1</a><!-- /wp:button -->', $content);
+        $content = preg_replace('/\[vc_btn title="(.*?)" link="(.*?)"[^\]]*\]/', '<!-- wp:button --><a href="' . esc_url($matches[2]) . '">' . esc_html($matches[1]) . '</a><!-- /wp:button -->', $content);
+
+        // Sanitize content before updating
+        $content = wp_kses_post($content);
 
         // Update the post content
-        $wpdb->update(
+        $result = $wpdb->update(
             $wpdb->posts,
             ['post_content' => $content],
             ['ID' => $post['ID']],
@@ -64,8 +69,12 @@ function wpbakery_to_gutenberg_convert() {
             ['%d']
         );
 
-        // Clear cache for updated pages
-        clean_post_cache($post['ID']);
+        if ($result === false) {
+            error_log("Failed to update post ID {$post['ID']}");
+        } else {
+            // Clear cache for updated pages
+            clean_post_cache($post['ID']);
+        }
     }
 
     echo '<div class="updated"><p>Migration Completed. WPBakery shortcodes have been converted.</p></div>';
