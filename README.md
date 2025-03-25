@@ -35,6 +35,18 @@ Before running the script, **create a full backup of your WordPress database** t
 ## 📢 Notes
 - This script **only converts common WPBakery shortcodes** (text blocks, images, buttons). Custom shortcodes may require additional modifications.
 - Ensure your WordPress installation is **updated** to the latest version before running the migration.
+  
+## License
+
+This plugin is licensed under the **GPLv3** license.
+
+## Credits
+
+- Developed by Milla Wynn [GitHub repository](https://github.com/millaw).
+
+## Support
+
+If you encounter any issues or have questions about the plugin, please open an issue on the [GitHub repository](https://github.com/millaw).
 
 🚀 Enjoy a **clean, Gutenberg-friendly website** without WPBakery shortcodes!
 
